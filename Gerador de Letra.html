@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeLetra · versos infinitos (sem rima) + batida</title>
+    <!-- Fontes e ícones -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at 30% 10%, #1b1b3a, #0b0b1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .glass-card {
+            background: rgba(20, 20, 40, 0.7);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 3rem 3rem 2rem 2rem;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06);
+            width: 100%;
+            max-width: 1080px;
+            padding: 2.2rem 2.5rem;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        h1 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        h1 i {
+            background: linear-gradient(145deg, #c37cfc, #8257e6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 2.4rem;
+        }
+
+        .sub {
+            color: rgba(220, 220, 255, 0.7);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #a26bfa;
+            padding-left: 1rem;
+            font-weight: 400;
+        }
+
+        /* abas (estilos) */
+        .style-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 2.2rem;
+            justify-content: center;
+        }
+
+        .tab {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #eaeaff;
+            cursor: pointer;
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.3px;
+            user-select: none;
+        }
+
+        .tab i {
+            margin-right: 8px;
+            font-size: 1rem;
+            color: #c28cff;
+        }
+
+        .tab:hover {
+            background: rgba(130, 90, 230, 0.3);
+            border-color: #a47cfc;
+            transform: translateY(-3px);
+        }
+
+        .tab.active {
+            background: linear-gradient(145deg, #7d4cf0, #b15cff);
+            border-color: #ddaaff;
+            color: white;
+            box-shadow: 0 10px 20px -5px #7a3eed, 0 0 15px #b45aff;
+        }
+
+        .tab.active i {
+            color: white;
+        }
+
+        /* campo de tema */
+        .input-theme {
+            margin: 2rem 0 1.8rem;
+            position: relative;
+        }
+
+        .input-theme i {
+            position: absolute;
+            left: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #b591ff;
+            font-size: 1.2rem;
+        }
+
+        .input-theme input {
+            width: 100%;
+            background: rgba(10, 8, 22, 0.7);
+            border: 2px solid rgba(200, 170, 255, 0.2);
+            border-radius: 60px;
+            padding: 1.2rem 1.8rem 1.2rem 3.5rem;
+            font-size: 1.1rem;
+            color: white;
+            outline: none;
+            transition: 0.2s;
+            backdrop-filter: blur(5px);
+            box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .input-theme input:focus {
+            border-color: #b77aff;
+            background: #110f25;
+            box-shadow: 0 0 20px #8f5afe, inset 0 2px 8px #000;
+        }
+
+        .input-theme input::placeholder {
+            color: rgba(210, 190, 255, 0.4);
+            font-weight: 400;
+        }
+
+        /* controle de quantidade de versos */
+        .verse-control {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 60px;
+            padding: 1rem 2rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(255, 200, 255, 0.1);
+        }
+
+        .verse-control label {
+            color: #c9b5ff;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .verse-control input[type=range] {
+            flex: 1;
+            min-width: 200px;
+            height: 8px;
+            background: linear-gradient(90deg, #9b6eff, #d288ff);
+            border-radius: 10px;
+            -webkit-appearance: none;
+        }
+
+        .verse-control input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #c58cff;
+            cursor: pointer;
+            border: 2px solid #a36eff;
+        }
+
+        .verse-control span {
+            background: #2e1d55;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        /* botões de ação */
+        .action-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0 2.2rem;
+        }
+
+        .btn-glow {
+            background: linear-gradient(135deg, #9d65ff, #6c3ef0);
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 20px 30px -8px #4b1ecf, 0 0 15px #b47aff;
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 220, 255, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .btn-glow:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 35px -5px #7f4cff, 0 0 30px #d7a5ff;
+        }
+
+        .btn-outline {
+            background: rgba(20, 15, 35, 0.7);
+            border: 2px solid #9f7aff;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            color: #f0e4ff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: #4a2f8a;
+            border-color: #ccb2ff;
+            color: white;
+            box-shadow: 0 0 20px #b17eff;
+        }
+
+        /* área da letra */
+        .lyrics-output, .beat-output {
+            background: rgba(8, 6, 20, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1.8rem 2rem;
+            border: 1px solid rgba(210, 160, 255, 0.2);
+            box-shadow: inset 0 0 25px #0000004d, 0 15px 25px #0000005e;
+            margin-top: 1.5rem;
+            position: relative;
+        }
+
+        .output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+            color: #cbb2ff;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .output-header i {
+            font-size: 1.3rem;
+            background: #342b4b;
+            padding: 0.6rem;
+            border-radius: 50%;
+            color: #e2c7ff;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            color: #ddd9ff;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn:hover {
+            background: #473a75;
+            border-color: #c2a2ff;
+            color: white;
+        }
+
+        #lyricsText {
+            font-size: 1.25rem;
+            line-height: 2rem;
+            color: #f0eaff;
+            white-space: pre-line;
+            text-shadow: 0 2px 5px black;
+            min-height: 250px;
+            font-weight: 400;
+            border-left: 3px solid #aa7eff;
+            padding-left: 1.5rem;
+        }
+
+        .beat-desc {
+            font-size: 1.2rem;
+            color: #d9c7ff;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.2rem 1.8rem;
+            border-radius: 1.8rem;
+            border: 1px dashed #b385ff;
+            line-height: 1.8rem;
+        }
+
+        .beat-desc i {
+            margin-right: 10px;
+            color: #ffb86b;
+        }
+
+        .copy-feedback {
+            position: absolute;
+            bottom: 15px;
+            right: 25px;
+            background: #4e3990;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: 0.2s;
+            pointer-events: none;
+        }
+
+        .copy-feedback.show {
+            opacity: 1;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: rgba(190, 170, 240, 0.4);
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        @media (max-width: 700px) {
+            .glass-card { padding: 1.5rem; }
+            .verse-control { flex-direction: column; align-items: stretch; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="glass-card">
+        <h1>
+            <i class="fas fa-music"></i> 
+            VibeLetra · versos sem rima
+        </h1>
+        <div class="sub">Escolha o estilo, o tema e quantos versos quer (até 20) — sem obrigação de rima, pura música</div>
+
+        <!-- abas de estilo -->
+        <div class="style-tabs" id="tabContainer">
+            <div class="tab active" data-genre="rap"><i class="fas fa-microphone-alt"></i> Rap</div>
+            <div class="tab" data-genre="trap"><i class="fas fa-crown"></i> Trap</div>
+            <div class="tab" data-genre="pop"><i class="fas fa-star"></i> Pop</div>
+            <div class="tab" data-genre="rock"><i class="fas fa-guitar"></i> Rock</div>
+            <div class="tab" data-genre="funk"><i class="fas fa-bolt"></i> Funk</div>
+        </div>
+
+        <!-- campo tema (opcional) -->
+        <div class="input-theme">
+            <i class="fas fa-pen-fancy"></i>
+            <input type="text" id="themeInput" placeholder="tema ou ideia (ex: liberdade, descoberta, noite...)" spellcheck="false">
+        </div>
+
+        <!-- controle deslizante de quantidade de versos -->
+        <div class="verse-control">
+            <label><i class="fas fa-list-ol"></i> Quantidade de versos:</label>
+            <input type="range" id="verseSlider" min="4" max="20" value="10" step="1">
+            <span id="verseCount">10</span>
+        </div>
+
+        <!-- botões lado a lado: gerar letra e gerar batida -->
+        <div class="action-buttons">
+            <button class="btn-glow" id="generateBtn">
+                <i class="fas fa-wand-magic-sparkles"></i> Gerar letra
+            </button>
+            <button class="btn-outline" id="beatBtn">
+                <i class="fas fa-drum"></i> Gerar batida
+            </button>
+        </div>
+
+        <!-- área da letra gerada -->
+        <div class="lyrics-output">
+            <div class="output-header">
+                <span><i class="fas fa-quote-right"></i> sua letra</span>
+                <button class="copy-btn" id="copyBtn"><i class="far fa-copy"></i> copiar</button>
+            </div>
+            <div id="lyricsText">
+                <!-- letra será inserida aqui -->
+            </div>
+            <div class="copy-feedback" id="copyFeedback">📋 copiado!</div>
+        </div>
+
+        <!-- área da batida gerada -->
+        <div class="beat-output">
+            <div class="output-header">
+                <span><i class="fas fa-headphones"></i> batida gerada</span>
+                <button class="copy-btn" id="copyBeatBtn"><i class="far fa-copy"></i> copiar batida</button>
+            </div>
+            <div id="beatText" class="beat-desc">
+                <!-- descrição da batida -->
+            </div>
+            <div class="copy-feedback" id="copyBeatFeedback">📋 copiado!</div>
+        </div>
+
+        <footer>cada clique combina versos soltos e batidas · baseado na vibe escolhida</footer>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- BASE MASSIVA DE VERSOS (SEM RIMA FORÇADA) ----------
+            const genres = {
+                rap: {
+                    lines: [
+                        "Acordo cedo e já penso no corre, o dia exige presença.",
+                        "A rua me ensinou a ler nas entrelinhas do olhar.",
+                        "Escrevo sobre a luta de quem vive à margem do sistema.",
+                        "O caderno é meu refúgio, a caneta minha voz.",
+                        "Não nasci em berço de ouro, mas construí meu castelo.",
+                        "A cada obstáculo, um novo degrau pra subir.",
+                        "Minha história é feita de versos e realidade crua.",
+                        "O som da cidade ecoa na minha mente 24 horas.",
+                        "Foco no progresso, sem perder a essência de quem sou.",
+                        "Ando pelas ruas observando o que ninguém vê.",
+                        "O suor do trabalho é o que molha minhas conquistas.",
+                        "Amo minha gente, minha quebrada, meu chão.",
+                        "Sou mais um na multidão, mas minha voz é única.",
+                        "Escrevo pra não enlouquecer, pra organizar os pensamentos.",
+                        "A vida é um verso em branco e eu preencho com atitude.",
+                        "Aprendi que o respeito não se compra, se conquista.",
+                        "Cada queda foi um empurrão pro meu crescimento.",
+                        "O som do tambor me lembra de onde vim.",
+                        "Minha alma é preta, forte, resistente e cheia de ginga.",
+                        "No fundo do peito, a chama da revolução nunca apaga.",
+                        "A rua respira poesia, mesmo em meio ao caos.",
+                        "Meu flow é a batida do coração da cidade.",
+                        "Trago na bagagem histórias de superação e fé.",
+                        "O microfone é minha arma, a palavra meu tiro.",
+                        "Não preciso de muito, só de um beat e verdade.",
+                        "A cada barra, uma cicatriz vira aprendizado.",
+                        "Sonho em ver meu povo livre, sem corrente, sem medo.",
+                        "A rua me acolheu, a rua me fez homem.",
+                        "Minha escrita é crua, direta, sem enfeite.",
+                        "O tempo é dinheiro, e eu inviro cada segundo em mim."
+                    ],
+                    themeLines: [
+                        "O [tema] me move, me faz levantar da cama.",
+                        "Falo de [tema] porque é o que pulsa na veia.",
+                        "[tema] é o motor de cada palavra que escrevo.",
+                        "Na minha vida, [tema] sempre esteve presente, mesmo nos dias difíceis.",
+                        "Se você me perguntar sobre [tema], vou responder com um verso.",
+                        "[tema] é o fio condutor da minha história.",
+                        "Minha relação com [tema] é de amor e resistência.",
+                        "Nas entrelinhas, [tema] se revela como salvação.",
+                        "Cada página do meu caderno respira [tema].",
+                        "O que seria de mim sem o [tema] pra me guiar?",
+                        "[tema] me lembra quem eu sou e aonde quero chegar.",
+                        "Quando tudo escurece, [tema] acende a luz.",
+                        "Minha comunidade vive intensamente o [tema].",
+                        "O [tema] é minha identidade, meu grito de liberdade.",
+                        "Mesmo longe, o [tema] me conecta às minhas raízes."
+                    ]
+                },
+                trap: {
+                    lines: [
+                        "A noite cai e o brilho do gelo reflete na pista.",
+                        "Acordei com a mente cheia de planos e zeros na conta.",
+                        "A solidão do estúdio é meu lugar favorito.",
+                        "Cada nota grave me faz flutuar pra longe da realidade.",
+                        "Eu confio em poucos, a maioria quer meu lugar.",
+                        "O dinheiro veio, mas a paz ainda tô buscando.",
+                        "Meus olhos vermelhos mostram as noites em claro criando.",
+                        "O passado me assombra, mas o futuro me chama.",
+                        "Na contramão do mundo, construo meu próprio caminho.",
+                        "A fama é doce, mas a solidão é amarga.",
+                        "O som do 808 é a trilha da minha vida.",
+                        "Muito drip, muito sonho, muito corre atrás.",
+                        "A estrada é longa, mas meu carro é rápido.",
+                        "Ela disse que me ama, mas será que ama meu corre?",
+                        "Os falsos se afastaram quando o sol brilhou.",
+                        "Acumulei riqueza, mas também aprendizado.",
+                        "O trap me salvou de um futuro incerto.",
+                        "No fundo do copo, afogo as mágoas do passado.",
+                        "Vivo o presente, mas já planejo o próximo passo.",
+                        "O céu é o limite, e eu tô indo além.",
+                        "Olho pra trás e vejo o quanto já ralei.",
+                        "A vitória tem gosto de maratona, não de sorte.",
+                        "Meu time é família, o resto é lucro.",
+                        "A noite me entende melhor que qualquer pessoa.",
+                        "O brilho das joias não ofusca minha essência.",
+                        "Construí meu castelo com tijolos de suor.",
+                        "Quem duvidou, hoje pede foto e elogia.",
+                        "O dinheiro traz conforto, mas não cura ferida.",
+                        "Vivo rápido, porque o tempo não espera.",
+                        "A estrada é minha casa, o palco meu lar."
+                    ],
+                    themeLines: [
+                        "[tema] me persegue desde a infância, hoje eu o controlo.",
+                        "Falo de [tema] porque é a única verdade que conheço.",
+                        "Entre doses de [tema] e notas de cem, sigo em frente.",
+                        "Meu som é sobre [tema] porque a vida real é assim.",
+                        "[tema] é o que me mantém acordado quando tudo quer me calar.",
+                        "A cada hit, um pouco de [tema] se revela.",
+                        "Nas vielas da mente, o [tema] ecoa sem parar.",
+                        "Se o [tema] é o preço da paz, eu pago sem reclamar.",
+                        "Meus versos são confessionários sobre [tema] e redenção.",
+                        "[tema] me lembra que sou humano, mesmo no topo.",
+                        "A rua sussurra [tema] e eu transformo em arte.",
+                        "O [tema] é o fio que une minhas histórias.",
+                        "Quando o grave pesa, o [tema] se torna melodia.",
+                        "Aprendi sobre [tema] nos becos escuros da cidade.",
+                        "Meu legado será sobre [tema] e superação."
+                    ]
+                },
+                pop: {
+                    lines: [
+                        "O sol nasceu mais bonito hoje, você vai ver.",
+                        "Acordei com uma canção na cabeça, era sobre nós.",
+                        "A vida é melhor quando a gente dança junto.",
+                        "Me perdi nos seus olhos e encontrei meu lugar.",
+                        "Cada momento ao seu lado é um hit sem fim.",
+                        "O amor é simples, mora nos detalhes do dia a dia.",
+                        "Vamos fugir pra qualquer lugar, só nós dois.",
+                        "O céu estrelado me lembra seu sorriso.",
+                        "A música alta e a estrada, essa é nossa trilha.",
+                        "Não quero perfeição, quero você de verdade.",
+                        "A felicidade mora nas pequenas coisas.",
+                        "Hoje é dia de celebrar a vida e o que virá.",
+                        "Meu coração dispara quando vejo sua mensagem.",
+                        "Tudo fica mais leve quando estamos juntos.",
+                        "O verão chegou e trouce você pra mim.",
+                        "Baila comigo até o mundo acabar.",
+                        "A vida é um filme e nós somos os protagonistas.",
+                        "Seu abraço é o refúgio que eu sempre busquei.",
+                        "Acredito em amor à primeira vista e em finais felizes.",
+                        "Cada dia com você é uma nova canção.",
+                        "A felicidade está nas coisas simples: um café, um sorriso.",
+                        "Não há roteiro, a gente vai inventando.",
+                        "Teu nome é poesia, teu jeito é canção.",
+                        "O amor não tem pressa, ele simplesmente acontece.",
+                        "A vida merece ser vivida em cores vibrantes.",
+                        "Dançar na chuva, gritar ao vento, viver intensamente.",
+                        "Me apaixono todos os dias pela mesma pessoa.",
+                        "O futuro a gente constrói junto, passo a passo.",
+                        "Sua voz é a melodia que acalma minha alma.",
+                        "Hoje eu escolho ser feliz, sem motivo aparente."
+                    ],
+                    themeLines: [
+                        "[tema] é o sentimento que move meu coração.",
+                        "Cada verso que escrevo é sobre o [tema] que sinto.",
+                        "O [tema] me inspira a ser uma pessoa melhor.",
+                        "Vivemos uma história de [tema] sem fim.",
+                        "Nas pequenas coisas encontro o [tema] da vida.",
+                        "[tema] é a palavra que define nosso encontro.",
+                        "Acredito no [tema] como acredito no amanhã.",
+                        "Meu mundo gira em torno do [tema] que você me traz.",
+                        "O [tema] está no ar, na brisa, no seu olhar.",
+                        "Quando penso em [tema], lembro de nós dois.",
+                        "A vida me ensinou que o [tema] vale a pena.",
+                        "[tema] é a chave que abre meu coração.",
+                        "Minhas canções falam de [tema] porque é o que me completa.",
+                        "Não há segredo: o [tema] é simples e verdadeiro.",
+                        "O [tema] é a força que me faz sorrir."
+                    ]
+                },
+                rock: {
+                    lines: [
+                        "O som da guitarra rasga o silêncio da noite.",
+                        "No palco, sou rei, sou livre, sou eterno.",
+                        "A plateia grita meu nome, e eu me sinto em casa.",
+                        "Cada acorde é um grito de liberdade.",
+                        "A estrada é longa, mas a banda segue unida.",
+                        "Vivemos como se não houvesse amanhã.",
+                        "O rock corre nas veias, não tem cura, não tem fim.",
+                        "A rebeldia é minha identidade, minha marca.",
+                        "Compor é colocar pra fora o que calo no dia a dia.",
+                        "O volume alto afoga as mágoas e traz paz.",
+                        "A vida é um show, e eu quero o melhor lugar.",
+                        "As cordas da guitarra contam histórias que palavras não contam.",
+                        "No meio do caos, encontro meu equilíbrio no riff.",
+                        "A energia do público me alimenta, me faz voar.",
+                        "Cada show é uma batalha vencida.",
+                        "O rock é minha terapia, minha religião.",
+                        "Sou filho do barulho, neto da distorção.",
+                        "As noites viram dias, e a gente segue na estrada.",
+                        "A música alta é a trilha da minha alma inquieta.",
+                        "Não peço licença, entro rompendo as portas.",
+                        "O suor no palco é prova de que estou vivo.",
+                        "A bateria pulsa como meu coração.",
+                        "Os solos são viagens que faço sem sair do lugar.",
+                        "A estrada me ensinou a ser forte e resiliente.",
+                        "Cada cidade, uma nova história pra contar.",
+                        "O rock não morre, ele se reinventa em nós.",
+                        "A juventude é eterna enquanto houver guitarra.",
+                        "Não há regras, só acordes e atitude.",
+                        "A voz rouca carrega a poesia da estrada.",
+                        "No fim do show, a certeza de que valeu a pena."
+                    ],
+                    themeLines: [
+                        "O [tema] é o combustível que move minha rebeldia.",
+                        "Grito [tema] aos quatro ventos, sem medo de ser feliz.",
+                        "Minhas letras falam de [tema] porque é a verdade que vivo.",
+                        "O [tema] é minha bandeira, meu hino de resistência.",
+                        "Quando tudo desaba, o [tema] me mantém de pé.",
+                        "[tema] é o que ecoa na distorção da minha guitarra.",
+                        "A cada riff, um pouco de [tema] se revela.",
+                        "O [tema] me acompanha desde o primeiro acorde.",
+                        "Vivemos intensamente o [tema] em cada nota.",
+                        "O [tema] é a essência do rock que carrego na alma.",
+                        "Minha jornada é sobre [tema] e liberdade.",
+                        "O [tema] é o grito que não consigo calar.",
+                        "Na estrada, o [tema] é meu companheiro de viagem.",
+                        "O som da bateria conta a história do meu [tema].",
+                        "A poesia do [tema] se esconde nos solos de guitarra."
+                    ]
+                },
+                funk: {
+                    lines: [
+                        "O grave bate forte, o chão treme, é o funk chegando.",
+                        "A noite é nossa, a pista tá quente, vem que tem.",
+                        "Rebola até o chão, faz o chão tremer.",
+                        "Na favela o som é alto, a alegria é contagiante.",
+                        "DJ, aumenta o grave que hoje é dia de baile.",
+                        "A multidão se entrega, não tem jeito, é funk.",
+                        "O corpo pede, a alma responde no ritmo.",
+                        "Desce, desce, desce, sobe, sobe, sobe.",
+                        "Na ponta do pé, no embalo do tamborzão.",
+                        "A festa não tem hora pra acabar.",
+                        "Todo mundo é igual quando o funk começa.",
+                        "A batida envolve, hipnotiza, faz esquecer os problemas.",
+                        "É o som da quebrada ecoando no asfalto.",
+                        "Menina dança, menina ginga, menina é fogo.",
+                        "A noite é uma criança, a gente brinca até o sol raiar.",
+                        "O suor escorre, a energia não para.",
+                        "No ritmo do funk, a gente se encontra, se entende.",
+                        "O passinho inova, todo mundo quer aprender.",
+                        "A diversidade dança junto, sem preconceito.",
+                        "O funk é voz, é vez, é resistência.",
+                        "A comunidade vibra, a rua vira salão.",
+                        "A cada batida, uma nova coreografia.",
+                        "O grave pesado faz o coração acelerar.",
+                        "Na pista, não existe errado, só diversão.",
+                        "A noite quente pede funk e liberdade.",
+                        "A dança é linguagem universal no baile.",
+                        "O funk aquece, acolhe, faz parte da gente.",
+                        "O suor da noite é o molho da festa.",
+                        "Vem pro bailão, que hoje a casa tá cheia.",
+                        "O som do funk é a trilha da nossa alegria."
+                    ],
+                    themeLines: [
+                        "No ritmo do [tema], a noite fica mais quente.",
+                        "Ela me pede [tema], eu vou dando no compasso.",
+                        "[tema] é o que a gente sente quando o grave bate.",
+                        "A cada [tema], um novo jeito de dançar.",
+                        "O baile inteiro canta [tema] junto com o DJ.",
+                        "[tema] é o hit que não sai do repeat na quebrada.",
+                        "Quando o [tema] começa, todo mundo se joga.",
+                        "A dança do [tema] é a mais pedida da noite.",
+                        "[tema] no paredão, a rua inteira escuta.",
+                        "O funk de [tema] é a nossa cara, nossa voz.",
+                        "O [tema] é o refrão que une a galera.",
+                        "Na pista, [tema] é o que nos faz suar.",
+                        "O grave do [tema] faz o chão tremer.",
+                        "A cada [tema], a noite ganha mais brilho.",
+                        "[tema] é o som que toca sem parar na nossa mente."
+                    ]
+                }
+            };
+
+            // ---------- BATIDAS POR ESTILO (descritivas) ----------
+            const beatStyles = {
+                rap: {
+                    name: "BOOM BAP CLÁSSICO",
+                    bpm: "85-95 BPM",
+                    samples: "bateria acústica pesada, sample de jazz, corte de vinil",
+                    vibe: "sério, urbano, letra em evidência",
+                    desc: "Batida seca, kick forte e caixa rim shot. Acompanhamento de baixo marcado. Ideal para flows rápidos e letras de protesto."
+                },
+                trap: {
+                    name: "TRAP 808 MAFIA",
+                    bpm: "130-150 BPM",
+                    samples: "808 subgrave, hi-hats rápidos, sintetizadores atmosféricos",
+                    vibe: "sombrio, luxuoso, espacial",
+                    desc: "Subgraves profundos, hi-hats com roll, claps espaçados. Atmosfera densa e melódica."
+                },
+                pop: {
+                    name: "POP RADIANTE",
+                    bpm: "110-126 BPM",
+                    samples: "piano eletrônico, bateria digital, pads, vocoder",
+                    vibe: "alegre, dançante, chiclete",
+                    desc: "Refrões grudentos, synths coloridos, batida quadrada e dançante. Perfeito para rádio."
+                },
+                rock: {
+                    name: "HARD ROCK 70/80",
+                    bpm: "120-140 BPM",
+                    samples: "guitarra distorcida, bateria ao vivo, baixo pulsante",
+                    vibe: "enérgico, rebelde, poderoso",
+                    desc: "Riffs de guitarra marcantes, bateria com bumbo duplo, energia bruta de estádio."
+                },
+                funk: {
+                    name: "FUNK 150 BPM",
+                    bpm: "130-150 BPM",
+                    samples: "tamborzão, grave pesado, samples de voz",
+                    vibe: "dançante, sensual, favela",
+                    desc: "Tamborzão característico, repique de ouvido, palmas. Grave que faz o chão tremer."
+                }
+            };
+
+            // Elementos DOM
+            const tabs = document.querySelectorAll('.tab');
+            const themeInput = document.getElementById('themeInput');
+            const verseSlider = document.getElementById('verseSlider');
+            const verseCount = document.getElementById('verseCount');
+            const generateBtn = document.getElementById('generateBtn');
+            const beatBtn = document.getElementById('beatBtn');
+            const lyricsDiv = document.getElementById('lyricsText');
+            const beatDiv = document.getElementById('beatText');
+            const copyBtn = document.getElementById('copyBtn');
+            const copyBeatBtn = document.getElementById('copyBeatBtn');
+            const copyFeedback = document.getElementById('copyFeedback');
+            const copyBeatFeedback = document.getElementById('copyBeatFeedback');
+
+            let activeGenre = 'rap';
+
+            // Atualiza contador do slider
+            verseSlider.addEventListener('input', function() {
+                verseCount.textContent = this.value;
+            });
+
+            // Utilitários
+            function escapeHtml(unsafe) {
+                if (!unsafe) return '';
+                return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            }
+
+            function shuffleArray(arr) {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+                return arr;
+            }
+
+            // Gerar letra com quantidade variável
+            function generateLyrics(genreKey, rawTheme, numVerses) {
+                const genreData = genres[genreKey];
+                if (!genreData) return 'Estilo não disponível.';
+
+                const theme = rawTheme.trim();
+                const safeTheme = theme ? escapeHtml(theme) : '';
+
+                let pool = [...genreData.lines];
+
+                if (safeTheme) {
+                    const themeLinesReplaced = genreData.themeLines.map(line =>
+                        line.replace(/\[tema\]/g, safeTheme)
+                    );
+                    pool = pool.concat(themeLinesReplaced);
+                } else {
+                    const fallbackTheme = 'vida';
+                    const fallbackLines = genreData.themeLines.map(line =>
+                        line.replace(/\[tema\]/g, fallbackTheme)
+                    );
+                    pool = pool.concat(fallbackLines.slice(0, 6));
+                }
+
+                pool = shuffleArray(pool);
+                const selectedLines = pool.slice(0, numVerses);
+                return selectedLines.join('\n');
+            }
+
+            // Gerar descrição da batida
+            function generateBeatDescription(genreKey) {
+                const beat = beatStyles[genreKey] || beatStyles.rap;
+                return `🎵 ${beat.name} · ${beat.bpm}\n🔊 ${beat.samples}\n🎛️ vibe: ${beat.vibe}\n📝 ${beat.desc}`;
+            }
+
+            // Atualizar letra
+            function updateLyrics() {
+                const theme = themeInput.value;
+                const num = parseInt(verseSlider.value, 10);
+                const lyrics = generateLyrics(activeGenre, theme, num);
+                lyricsDiv.innerText = lyrics;
+            }
+
+            // Atualizar batida
+            function updateBeat() {
+                const beatDesc = generateBeatDescription(activeGenre);
+                beatDiv.innerText = beatDesc;
+            }
+
+            // Ativar tab
+            function setActiveTab(selectedTab) {
+                tabs.forEach(tab => tab.classList.remove('active'));
+                selectedTab.classList.add('active');
+                activeGenre = selectedTab.getAttribute('data-genre');
+            }
+
+            // Event listeners
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    setActiveTab(this);
+                });
+            });
+
+            generateBtn.addEventListener('click', function() {
+                updateLyrics();
+            });
+
+            beatBtn.addEventListener('click', function() {
+                updateBeat();
+            });
+
+            copyBtn.addEventListener('click', function() {
+                const text = lyricsDiv.innerText;
+                if (!text.trim()) return;
+                navigator.clipboard.writeText(text).then(() => {
+                    copyFeedback.classList.add('show');
+                    setTimeout(() => copyFeedback.classList.remove('show'), 1500);
+                });
+            });
+
+            copyBeatBtn.addEventListener('click', function() {
+                const text = beatDiv.innerText;
+                if (!text.trim()) return;
+                navigator.clipboard.writeText(text).then(() => {
+                    copyBeatFeedback.classList.add('show');
+                    setTimeout(() => copyBeatFeedback.classList.remove('show'), 1500);
+                });
+            });
+
+            themeInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') generateBtn.click();
+            });
+
+            // Inicialização
+            window.addEventListener('load', function() {
+                updateLyrics();
+                updateBeat();
+            });
+        })();
+    </script>
+</body>
+</html>
